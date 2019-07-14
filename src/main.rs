@@ -1,16 +1,20 @@
 use serenity::{
     prelude::*,
-    model::gateway::Ready,
+    model::{channel::{Message}, gateway::Ready, id::UserId},
     framework::standard::{
-        StandardFramework, DispatchError,
-        macros::{group}
+        Args, StandardFramework, DispatchError, HelpOptions, CommandResult, CommandGroup,
+        help_commands,
+        macros::{group, help}
     },
 };
 use std::{fs, collections::HashSet};
 use toml::Value;
 
 mod commands;
-use commands::cat::*;
+use commands::{
+    cat::*,
+    nekoslife::*
+};
 
 struct Handler;
 
@@ -20,9 +24,27 @@ impl EventHandler for Handler {
     }
 }
 
+#[help]
+fn default_help(
+    context: &mut Context,
+    msg: &Message,
+    args: Args,
+    help_options: &'static HelpOptions,
+    groups: &[&'static CommandGroup],
+    owners: HashSet<UserId>
+) -> CommandResult {
+    help_commands::plain(context, msg, args, help_options, groups, owners)
+}
+
+
 group!({
     name: "fun",
     commands: [cat]
+});
+
+group!({
+    name: "weeb",
+    commands: [catgirl, foxgirl]
 });
 
 fn main() {
@@ -61,7 +83,9 @@ fn main() {
                 let _ = msg.channel_id.say(&ctx.http, &format!("Try this again in {} seconds.", seconds));
             }
         })
+        .help(&DEFAULT_HELP)
         .group(&FUN_GROUP)
+        .group(&WEEB_GROUP)
     );
 
     if let Err(why) = client.start() {

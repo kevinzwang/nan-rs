@@ -9,15 +9,16 @@ use serenity::{
 use serde::Deserialize;
 
 #[derive(Deserialize)]
-struct RandomCat {
+struct RandomCatResponse {
   file: String
 }
 
 #[command]
+#[description("Gives you a cute cat pic!")]
 pub fn cat(ctx: &mut Context, msg: &Message) -> CommandResult {
   let url = match reqwest::get("http://aws.radom.cat/meow") {
     Ok(mut r) => {
-      let resp:RandomCat = r.json()?;
+      let resp: RandomCatResponse = r.json()?;
       resp.file
     },
     Err(_) => reqwest::get("http://thecatapi.com/api/images/get")?.url().to_string()
