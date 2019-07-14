@@ -1,0 +1,11 @@
+[package]
+name = "nano-rs"
+version = "0.1.0"
+authors = ["kevinzwang"]
+edition = "2018"
+
+[dependencies]
+serenity = "0.6.2"
+toml = "0.5.1"
+reqwest = "0.9.18"
+serde = "1.0.94"
