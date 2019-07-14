@@ -11,7 +11,7 @@ use std::{collections::HashSet, fs};
 use toml::Value;
 
 mod commands;
-use commands::{cat::*, nekoslife::*, ping::*};
+use commands::{cat::*, nekoslife::*, ping::*, quit::*};
 
 struct Handler;
 
@@ -45,7 +45,7 @@ group!({
 
 group!({
   name: "util",
-  commands: [ping]
+  commands: [ping, quit]
 });
 
 fn main() {
