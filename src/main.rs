@@ -11,7 +11,7 @@ use std::{collections::HashSet, fs};
 use toml::Value;
 
 mod commands;
-use commands::{cat::*, nekoslife::*};
+use commands::{cat::*, nekoslife::*, ping::*};
 
 struct Handler;
 
@@ -34,13 +34,18 @@ fn default_help(
 }
 
 group!({
-    name: "fun",
-    commands: [cat]
+  name: "fun",
+  commands: [cat]
 });
 
 group!({
-    name: "weeb",
-    commands: [catgirl, foxgirl]
+  name: "weeb",
+  commands: [catgirl, foxgirl]
+});
+
+group!({
+  name: "util",
+  commands: [ping]
 });
 
 fn main() {
@@ -81,7 +86,8 @@ fn main() {
       })
       .help(&DEFAULT_HELP)
       .group(&FUN_GROUP)
-      .group(&WEEB_GROUP),
+      .group(&WEEB_GROUP)
+      .group(&UTIL_GROUP),
   );
 
   if let Err(why) = client.start() {

@@ -5,7 +5,7 @@ authors = ["kevinzwang"]
 edition = "2018"
 
 [dependencies]
-serenity = "0.6.2"
-toml = "0.5.1"
-reqwest = "0.9.18"
-serde = "1.0.94"
+serenity = "0.6"
+toml = "0.5"
+reqwest = "0.9"
+serde = "1.0"

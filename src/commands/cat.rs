@@ -13,7 +13,7 @@ struct RandomCatResponse {
 #[command]
 #[description("Gives you a cute cat pic!")]
 pub fn cat(ctx: &mut Context, msg: &Message) -> CommandResult {
-  let url = match reqwest::get("http://aws.radom.cat/meow") {
+  let url = match reqwest::get("http://aws.random.cat/meow") {
     Ok(mut r) => {
       let resp: RandomCatResponse = r.json()?;
       resp.file
@@ -23,7 +23,7 @@ pub fn cat(ctx: &mut Context, msg: &Message) -> CommandResult {
       .to_string(),
   };
 
-  let _ = msg.channel_id.say(&ctx.http, url);
+  let _ = msg.channel_id.say(&ctx.http, url)?;
 
   Ok(())
 }
