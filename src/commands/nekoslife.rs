@@ -1,17 +1,14 @@
+use serde::Deserialize;
 use serenity::{
-  prelude::*,
+  framework::standard::{macros::command, CommandResult},
   model::prelude::*,
-  framework::standard::{
-    CommandResult,
-    macros::command
-  }
+  prelude::*,
 };
 use std::error::Error;
-use serde::Deserialize;
 
 #[derive(Deserialize)]
 struct NekosLifeResponse {
-  url: String
+  url: String,
 }
 
 fn fetch_nekoslife(cat: &str) -> Result<String, Box<Error>> {

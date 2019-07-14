@@ -1,16 +1,13 @@
-use serenity::{
-  prelude::*,
-  model::prelude::*,
-  framework::standard::{
-    CommandResult,
-    macros::command
-  }
-};
 use serde::Deserialize;
+use serenity::{
+  framework::standard::{macros::command, CommandResult},
+  model::prelude::*,
+  prelude::*,
+};
 
 #[derive(Deserialize)]
 struct RandomCatResponse {
-  file: String
+  file: String,
 }
 
 #[command]
@@ -20,8 +17,10 @@ pub fn cat(ctx: &mut Context, msg: &Message) -> CommandResult {
     Ok(mut r) => {
       let resp: RandomCatResponse = r.json()?;
       resp.file
-    },
-    Err(_) => reqwest::get("http://thecatapi.com/api/images/get")?.url().to_string()
+    }
+    Err(_) => reqwest::get("http://thecatapi.com/api/images/get")?
+      .url()
+      .to_string(),
   };
 
   let _ = msg.channel_id.say(&ctx.http, url);
