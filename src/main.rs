@@ -11,7 +11,7 @@ use std::{collections::HashSet, fs};
 use toml::Value;
 
 mod commands;
-use commands::{cat::*, nekoslife::*, ping::*, quit::*};
+use commands::{anime::*, cat::*, nekoslife::*, ping::*, quit::*};
 
 struct Handler;
 
@@ -40,13 +40,30 @@ group!({
 
 group!({
   name: "weeb",
-  commands: [catgirl, foxgirl]
+  commands: [catgirl, foxgirl, anime]
 });
 
 group!({
   name: "util",
   commands: [ping, quit]
 });
+
+fn dispatch_error_handler<'a, 'b>(ctx: &'a mut Context, msg: &'b Message, error: DispatchError) {
+  if let DispatchError::Ratelimited(seconds) = error {
+    let _ = msg.channel_id.say(
+      &ctx.http,
+      &format!("Try this again in {} seconds.", seconds),
+    );
+  } else if let DispatchError::NotEnoughArguments { min, given } = error {
+    let _ = msg.channel_id.say(
+      &ctx.http,
+      &format!(
+        "You provided {} argument(s) but the command expected {}!",
+        given, min
+      ),
+    );
+  }
+}
 
 fn main() {
   let config_file = "config.toml";
@@ -76,14 +93,7 @@ fn main() {
           .prefix("!")
           .owners(owners)
       })
-      .on_dispatch_error(|ctx, msg, error| {
-        if let DispatchError::Ratelimited(seconds) = error {
-          let _ = msg.channel_id.say(
-            &ctx.http,
-            &format!("Try this again in {} seconds.", seconds),
-          );
-        }
-      })
+      .on_dispatch_error(dispatch_error_handler)
       .help(&DEFAULT_HELP)
       .group(&FUN_GROUP)
       .group(&WEEB_GROUP)

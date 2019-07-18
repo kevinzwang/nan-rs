@@ -1,0 +1,17 @@
+query SearchAnime ($search: String, $page: Int, $perPage: Int) {
+    Page (page: $page, perPage: $perPage) {
+        pageInfo {
+            total
+            hasNextPage
+            currentPage
+            lastPage
+        }
+        media(search: $search, type: ANIME) {
+            title {
+                userPreferred
+            }
+            siteUrl
+            id
+        }
+    }
+}
